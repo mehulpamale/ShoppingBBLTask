@@ -1,0 +1,21 @@
+C:\Users\mehul.pamale>keytool -list -v -alias androiddebugkey -keystore %USERPROFILE%\.android\debug.keystore
+Enter keystore password:
+Alias name: androiddebugkey
+Creation date: Feb 25, 2021
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: C=US, O=Android, CN=Android Debug
+Issuer: C=US, O=Android, CN=Android Debug
+Serial number: 1
+Valid from: Thu Feb 25 18:59:40 IST 2021 until: Sat Feb 18 18:59:40 IST 2051
+Certificate fingerprints:
+         SHA1: 2B:C6:82:71:0F:B0:CC:6C:80:63:B1:6D:A7:EA:CF:E3:20:50:7F:34
+         SHA256: 1D:78:60:44:CD:3D:04:62:19:C4:A5:AB:B3:83:94:70:22:19:6B:2B:30:A1:F0:23:57:BC:95:EE:71:3D:2D:4C
+Signature algorithm name: SHA1withRSA (weak)
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 1
+
+Warning:
+The certificate uses the SHA1withRSA signature algorithm which is considered a security risk. This algorithm will be disabled in a future update.
+The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore C:\Users\mehul.pamale\.android\debug.keystore -destkeystore C:\Users\mehul.pamale\.android\debug.keystore -deststoretype pkcs12".

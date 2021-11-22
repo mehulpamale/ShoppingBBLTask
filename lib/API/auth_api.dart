@@ -1,16 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shopping_bbl_task/models/product.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class ProductAPI {
+class AuthAPI {
   final firestore = FirebaseFirestore.instance;
+  var auth = FirebaseAuth.instance;
 
-  @override
-  Future<List<Product>> getProducts() async {
-    final coll = firestore.collection('shopping_list');
-    QuerySnapshot querySnapshot = await coll.orderBy('product_id').get();
-    final list = querySnapshot.docs
-        .map((docSnap) => Product.fromDocumentSnapshot(docSnap))
-        .toList();
-    return list;
+  Future verifyPhoneNumber(
+    phoneNumber,
+    verificationCompleted,
+    verificationFailed,
+    codeSent,
+    codeAutoRetrievalTimeout,
+  ) async {
+    await auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: verificationCompleted,
+      verificationFailed: verificationFailed,
+      codeSent: codeSent,
+      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+    );
+  }
+
+  Future<UserCredential> loginWithCredential(AuthCredential authCredential) async {
+    return await auth.signInWithCredential(authCredential);
   }
 }
