@@ -8,7 +8,7 @@ class ProductListInitial extends ProductListState {}
 class ProductListLoading extends ProductListState {}
 
 class ProductListLoaded extends ProductListState {
-  final List<Product> productList;
+  final List<ProductModel> productList;
 
   ProductListLoaded(this.productList);
 }

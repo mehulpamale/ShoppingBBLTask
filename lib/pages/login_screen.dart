@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_bbl_task/cubit/phone_auth/phone_auth_cubit.dart';
-import 'package:shopping_bbl_task/models/product.dart';
+import 'package:shopping_bbl_task/models/product_model.dart';
 import 'package:shopping_bbl_task/pages/home_screen.dart';
 import 'package:shopping_bbl_task/widgets/named_circular_progress_indicator.dart';
 
@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
         codeAutoRetrievalTimeout: (s) => print('timeout: ${s}'));
   }
 
-  Future<List<Product>> test() async {
+  Future<List<ProductModel>> test() async {
     var firestore = FirebaseFirestore.instance;
     var coll = firestore.collection('shopping_list');
     QuerySnapshot querySnapshot = await coll.orderBy('product_id').get();
@@ -174,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     var list = querySnapshot.docs
         // ..sort((a, b) => a['product_id'] < b['product_id'])
-        .map((docSnap) => Product.fromDocumentSnapshot(docSnap))
+        .map((docSnap) => ProductModel.fromDocumentSnapshot(docSnap))
         .toList();
     print('list.: ${list.length}');
     return list;

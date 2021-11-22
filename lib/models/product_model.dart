@@ -7,12 +7,12 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-Product productFromJson(String str) => Product.fromJson(json.decode(str));
+ProductModel productFromJson(String str) => ProductModel.fromJson(json.decode(str));
 
-String productToJson(Product data) => json.encode(data.toJson());
+String productToJson(ProductModel data) => json.encode(data.toJson());
 
-class Product implements Equatable {
-  Product({
+class ProductModel implements Equatable {
+  ProductModel({
     required this.rate,
     required this.quantity,
     required this.name,
@@ -26,8 +26,8 @@ class Product implements Equatable {
   final int productId;
   final String image;
 
-  factory Product.fromJson(Map<String, dynamic> json) =>
-      Product(
+  factory ProductModel.fromJson(Map<String, dynamic> json) =>
+      ProductModel(
         rate: json["rate"],
         quantity: json["quantity"],
         name: json["name"],
@@ -35,8 +35,8 @@ class Product implements Equatable {
         image: json["image"],
       );
 
-  factory Product.fromDocumentSnapshot(DocumentSnapshot docSnap) =>
-      Product(
+  factory ProductModel.fromDocumentSnapshot(DocumentSnapshot docSnap) =>
+      ProductModel(
         rate: docSnap["rate"],
         quantity: docSnap["quantity"],
         name: docSnap["name"],
