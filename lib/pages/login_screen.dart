@@ -78,15 +78,6 @@ class _LoginScreenState extends State<LoginScreen> {
           return (const Center(child: Text('failure')));
         },
       ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            ListTile(
-              title: TextButton.icon(onPressed: (), icon: icon, label: label),
-            )
-          ],
-        ),
-      ),
     );
   }
 

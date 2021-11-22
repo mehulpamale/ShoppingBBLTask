@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_bbl_task/cubit/phone_auth/phone_auth_cubit.dart';
 import 'package:shopping_bbl_task/cubit/product_list/product_list_cubit.dart';
 import 'package:shopping_bbl_task/pages/login_screen.dart';
-import 'package:shopping_bbl_task/widgets/wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: Wrapper(),
+        home: const LoginScreen(),
       ),
     );
   }

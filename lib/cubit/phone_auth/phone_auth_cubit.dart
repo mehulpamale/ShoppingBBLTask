@@ -13,7 +13,11 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
   PhoneAuthCubit() : super(PhoneAuthInitial());
 
   Future tryLogin() async {
-    if (_service.auth.currentUser?.uid != null) emit(PhoneAuthUserLoggedIn());
+    if (_service.auth.currentUser?.uid != null) {
+      emit(PhoneAuthUserLoggedIn());
+    } else {
+      emit(PhoneAuthUserNotLoggedIn());
+    }
     // var sp = await SharedPreferences.getInstance();
     // var storedCredentials = sp.get(credentials_string);
     // if (storedCredentials == null || storedCredentials.toString().isEmpty) {
@@ -53,5 +57,8 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
     loginWithCred(phoneAuthCredential);
   }
 
-  Future logout() async => _service.auth.signOut();
+  Future logout() async {
+    await _service.auth.signOut();
+    emit(PhoneAuthUserNotLoggedIn());
+  }
 }
