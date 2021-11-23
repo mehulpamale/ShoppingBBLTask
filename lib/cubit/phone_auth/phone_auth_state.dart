@@ -60,6 +60,6 @@ class PhoneAuthFailed extends PhoneAuthState {
   final dynamic failure;
 
   PhoneAuthFailed(this.failure) {
-    print('PhoneAuthFailed');
+    print('PhoneAuthFailed: $failure');
   }
 }
