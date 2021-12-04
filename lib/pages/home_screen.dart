@@ -21,44 +21,30 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Shopping'),
-          actions: [
-            IconButton(
-                onPressed: () => null,
-                icon: const Icon(Icons.add_shopping_cart))
-          ],
-        ),
-        body: BlocBuilder<ProductListCubit, ProductListState>(
-          builder: (ctx, state) {
-            if (state is ProductListLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is ProductListLoaded) {
-              return productListWid(state);
-            } else if (state is ProductListFailure) {
-              return Center(child: Text('failure: ${state.failure}'));
-            } else if (state is PhoneAuthUserNotLoggedIn) {
-              return const LoginScreen();
-            }
-            return const Center(
-              child: Text('failure'),
-            );
-          },
-        ),
-        drawer: Drawer(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              ListTile(
-                title: TextButton.icon(
-                    onPressed: () =>
-                        BlocProvider.of<PhoneAuthCubit>(context).logout(),
-                    icon: const Icon(Icons.logout),
-                    label: const Text('logout')),
-              )
-            ],
-          ),
-        ));
+      appBar: AppBar(
+        title: const Text('Shopping'),
+        actions: [
+          IconButton(
+              onPressed: () => null, icon: const Icon(Icons.add_shopping_cart))
+        ],
+      ),
+      body: BlocBuilder<ProductListCubit, ProductListState>(
+        builder: (ctx, state) {
+          if (state is ProductListLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ProductListLoaded) {
+            return productListWid(state);
+          } else if (state is ProductListFailure) {
+            return Center(child: Text('failure: ${state.failure}'));
+          } else if (state is PhoneAuthUserNotLoggedIn) {
+            return const LoginScreen();
+          }
+          return const Center(
+            child: Text('failure'),
+          );
+        },
+      ),
+    );
   }
 }
 

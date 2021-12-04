@@ -5,13 +5,13 @@ abstract class PhoneAuthState {}
 
 class PhoneAuthInitial extends PhoneAuthState {
   PhoneAuthInitial() {
-    print('PhoneAuthInitial');
+    debugPrint('PhoneAuthInitial');
   }
 }
 
 class PhoneAuthRequestingOTP extends PhoneAuthState {
   PhoneAuthRequestingOTP() {
-    print('PhoneAuthRequestingOTP');
+    debugPrint('PhoneAuthRequestingOTP');
   }
 }
 
@@ -20,31 +20,31 @@ class PhoneAuthCodeSentByServer extends PhoneAuthState {
   final int? resendToken;
 
   PhoneAuthCodeSentByServer(this.verificationID, this.resendToken) {
-    print('PhoneAuthCodeSentByServer');
+    debugPrint('PhoneAuthCodeSentByServer');
   }
 }
 
 class PhoneAuthOTPSentForVerification extends PhoneAuthState {
   PhoneAuthOTPSentForVerification() {
-    print('PhoneAuthOTPSentForVerification');
+    debugPrint('PhoneAuthOTPSentForVerification');
   }
 }
 
 class PhoneAuthUserNotLoggedIn extends PhoneAuthState {
   PhoneAuthUserNotLoggedIn() {
-    print('PhoneAuthUserNotLoggedIn');
+    debugPrint('PhoneAuthUserNotLoggedIn');
   }
 }
 
 class PhoneAuthUserLoggingIn extends PhoneAuthState {
   PhoneAuthUserLoggingIn() {
-    print('PhoneAuthUserLoggingIn');
+    debugPrint('PhoneAuthUserLoggingIn');
   }
 }
 
 class PhoneAuthUserLoggedIn extends PhoneAuthState {
   PhoneAuthUserLoggedIn() {
-    print('PhoneAuthUserLoggedIn');
+    debugPrint('PhoneAuthUserLoggedIn');
   }
 }
 
@@ -52,7 +52,7 @@ class PhoneAuthVerified extends PhoneAuthState {
   final PhoneAuthCredential _phoneAuthCredential;
 
   PhoneAuthVerified(this._phoneAuthCredential) {
-    print('PhoneAuthVerified');
+    debugPrint('PhoneAuthVerified');
   }
 }
 
@@ -60,6 +60,6 @@ class PhoneAuthFailed extends PhoneAuthState {
   final dynamic failure;
 
   PhoneAuthFailed(this.failure) {
-    print('PhoneAuthFailed: $failure');
+    debugPrint('PhoneAuthFailed: $failure');
   }
 }

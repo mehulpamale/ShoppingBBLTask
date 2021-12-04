@@ -1,43 +1,28 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shopping_bbl_task/API/auth_api.dart';
-import 'package:shopping_bbl_task/consts/constants.dart';
+import 'package:shopping_bbl_task/API/phone_auth_api.dart';
+import 'package:shopping_bbl_task/API/user_api.dart';
 
 part 'phone_auth_state.dart';
 
 class PhoneAuthCubit extends Cubit<PhoneAuthState> {
-  final _service = AuthAPI();
+  final _service = PhoneAuthAPI();
+  final _userService = UserAPI();
 
-  PhoneAuthCubit() : super(PhoneAuthInitial());
-
-  Future tryLogin() async {
-    if (_service.auth.currentUser?.uid != null) {
-      emit(PhoneAuthUserLoggedIn());
-    } else {
-      emit(PhoneAuthUserNotLoggedIn());
-    }
-    // var sp = await SharedPreferences.getInstance();
-    // var storedCredentials = sp.get(credentials_string);
-    // if (storedCredentials == null || storedCredentials.toString().isEmpty) {
-    //   emit(PhoneAuthUserNotLoggedIn());
-    // }
-    // loginWithCred(storedCredentials);
-  }
+  PhoneAuthCubit() : super(PhoneAuthUserNotLoggedIn());
 
   Future loginWithOTP(String number) async {
-    var sp = await SharedPreferences.getInstance();
     _service.verifyPhoneNumber(
       number,
       (PhoneAuthCredential phoneAuthCred) async {
         emit(PhoneAuthVerified(phoneAuthCred));
-        sp.setString(credentials_string, phoneAuthCred.toString());
         emit(PhoneAuthUserLoggingIn());
-        await _service.loginWithCredential(phoneAuthCred);
+        await _userService.loginWithCredential(phoneAuthCred);
         emit(PhoneAuthUserLoggedIn());
       },
-      (failure) => PhoneAuthFailed(failure),
+      (failure) => emit(PhoneAuthFailed(failure)),
       (verificationID, resendToken) =>
           emit(PhoneAuthCodeSentByServer(verificationID, resendToken)),
       (verificationID) {},
@@ -45,9 +30,14 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
   }
 
   Future loginWithCred(dynamic cred) async {
-    await _service.loginWithCredential(cred);
+    UserCredential userCredential = await _userService.loginWithCredential
+      (cred);
     emit(PhoneAuthUserLoggedIn());
   }
+
+  // Future addUserToDB(UserCredential userCredential){
+  //
+  // }
 
   Future sendReceivedOTPForVerification(
       String otp, String verificationID, int? resendToken) async {

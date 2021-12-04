@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_bbl_task/cubit/phone_auth/phone_auth_cubit.dart';
-import 'package:shopping_bbl_task/models/product_model.dart';
+import 'package:shopping_bbl_task/cubit/user/user_auth_cubit.dart';
 import 'package:shopping_bbl_task/pages/home_screen.dart';
 import 'package:shopping_bbl_task/widgets/named_circular_progress_indicator.dart';
 
@@ -26,7 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    BlocProvider.of<PhoneAuthCubit>(context).tryLogin();
+    debugPrint('_LoginScreenState.initState');
+    BlocProvider.of<UserAuthCubit>(context).tryLogin();
     super.initState();
   }
 
@@ -36,22 +34,25 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocBuilder<PhoneAuthCubit, PhoneAuthState>(
         builder: (c, s) {
           if (s is PhoneAuthInitial) {
+            debugPrint('_LoginScreenState.build');
             return const Center(child: CircularProgressIndicator());
           } else if (s is PhoneAuthUserLoggingIn) {
             return const Center(child: CircularProgressIndicator());
           } else if (s is PhoneAuthUserLoggedIn) {
+            BlocProvider.of<UserAuthCubit>(context).tryLogin();
             Navigator.pushReplacement(
-                c, MaterialPageRoute(builder: (c) => HomeScreen()));
+                c, MaterialPageRoute(builder: (c) => const HomeScreen()));
           } else if (s is PhoneAuthVerified) {
             return const Center(child: CircularProgressIndicator());
           } else if (s is PhoneAuthFailed) {
             return Center(
                 child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('failure: ${s.failure}\nplease try again'),
                 ElevatedButton(
-                    onPressed: () => BlocProvider.of<PhoneAuthCubit>(context)
-                        .emit(PhoneAuthUserNotLoggedIn()),
+                    onPressed: () => BlocProvider.of<UserAuthCubit>(context)
+                        .emit(UserAuthUserNotLoggedIn()),
                     child: const Text('Retry'))
               ],
             ));
@@ -65,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
             return const NamedCircularProgressIndicator('requesting OTP');
           } else if (s is PhoneAuthCodeSentByServer) {
             infoText = 'Please enter the OTP received';
+            numberTEC.clear();
             buttonText = 'Verify OTP';
             buttonClick = () {
               BlocProvider.of<PhoneAuthCubit>(context)
@@ -123,60 +125,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ]),
       ),
     );
-  }
-
-  void spTest() async {
-    var sp = await SharedPreferences.getInstance();
-    print(await sp.setString('test', 'test'));
-    print(await sp.get('test'));
-  }
-
-  void phoneTest() async {
-    var auth = FirebaseAuth.instance;
-    await auth.verifyPhoneNumber(
-        phoneNumber: "+91 899-971-0251",
-        verificationCompleted: (cred) {
-          print('cred: ${cred}');
-          auth.signInWithCredential(cred);
-        },
-        verificationFailed: (e) => print('failed: ${e}'),
-        codeSent: (s, i) {
-          print('codesent: $s | $i');
-          setState(() {
-            if (numberTEC.text.length == 6) {
-              PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                  verificationId: s, smsCode: numberTEC.text);
-              print('codesent 1: ${credential}');
-            }
-          });
-        },
-        codeAutoRetrievalTimeout: (s) => print('timeout: ${s}'));
-  }
-
-  Future<List<ProductModel>> test() async {
-    var firestore = FirebaseFirestore.instance;
-    var coll = firestore.collection('shopping_list');
-    QuerySnapshot querySnapshot = await coll.orderBy('product_id').get();
-
-    // for (var element in querySnapshot.docs) {
-    //   await element.reference.delete();
-    // }
-    // for (var i = 0; i < 10; i++) {
-    //   coll.add({
-    //     'product_id': i,
-    //     'name': 'Dettol',
-    //     'image':
-    //         'https://firebasestorage.googleapis.com/v0/b/shoppingcartbbl.appspot.com/o/dettol_soap.jpg?alt=media&token=6afc17ed-f9c3-44f5-b29f-1c5e11fda85c',
-    //     'rate': 25,
-    //     'quantity': 10
-    //   });
-    // }
-
-    var list = querySnapshot.docs
-        // ..sort((a, b) => a['product_id'] < b['product_id'])
-        .map((docSnap) => ProductModel.fromDocumentSnapshot(docSnap))
-        .toList();
-    print('list.: ${list.length}');
-    return list;
   }
 }
